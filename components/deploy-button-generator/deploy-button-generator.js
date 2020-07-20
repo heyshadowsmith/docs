@@ -17,6 +17,19 @@ import Center from '~/components/layout/center'
 import styles from './deploy-button-generator.module.css'
 import HR from '~/components/text/hr'
 
+function validateURL(str) {
+  var pattern = new RegExp(
+    '^(https?:\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$',
+    'i'
+  ) // fragment locator
+  return !!pattern.test(str)
+}
+
 const generateId = () =>
   Math.random()
     .toString(36)
@@ -29,13 +42,17 @@ export default function DeployButtonGenerator() {
   const [repository, setRepository] = useState(defaultRepo)
   const [env, setEnv] = useState([{ value: '', id: generateId() }])
   const [envDescription, setEnvDescription] = useState('')
+  const [envDescriptionError, setEnvDescriptionError] = useState('')
   const [envLink, setEnvLink] = useState('')
   const [envLinkError, setEnvLinkError] = useState('')
   const [redirectUrl, setRedirectUrl] = useState('')
+  const [redirectUrlError, setRedirectUrlError] = useState('')
   const [developerId, setDeveloperId] = useState('')
   const [developerIdError, setDeveloperIdError] = useState('')
   const [projectName, setProjectName] = useState('')
+  const [projectNameError, setProjectNameError] = useState('')
   const [repoName, setRepoName] = useState('')
+  const [repoNameError, setRepoNameError] = useState('')
   const isAmp = useAmp()
   const importUrl = 'https://vercel.com/import/git'
 
@@ -64,23 +81,76 @@ export default function DeployButtonGenerator() {
   }
 
   const handleEnvDescChange = event => {
-    setEnvDescription(event.target.value)
+    if (hasEnv && event.target.value.length > 255) {
+      setEnvDescriptionError(
+        'The Environment Variables description must be 255 characters or less.'
+      )
+    } else {
+      setEnvDescriptionError('')
+      setEnvDescription(event.target.value)
+    }
   }
 
   const handleEnvLinkChange = event => {
-    setEnvLink(event.target.value)
+    const newEnvLink = event.target.value
+
+    if (
+      hasEnv &&
+      envDescription !== '' &&
+      newEnvLink.length >= 1 &&
+      !validateURL(newEnvLink)
+    ) {
+      setEnvLinkError('Environment Variable external link must be a valid URL.')
+    } else {
+      setEnvLinkError('')
+      setEnvLink(newEnvLink)
+    }
   }
 
   const handleProjectNameChange = event => {
-    setProjectName(event.target.value)
+    const newProjectName = event.target.value
+    if (newProjectName.length > 100) {
+      setProjectNameError('A Project name cannot be longer than 100 characters')
+    } else if (
+      newProjectName.length >= 1 &&
+      !/^[a-z0-9]([a-z0-9]|-[a-z0-9])*$/.test(newProjectName)
+    ) {
+      setProjectNameError(
+        'Project names must be lowercase, start and end with a letter, and cannot contain special characters other than a hyphen ("-").'
+      )
+    } else {
+      setProjectNameError('')
+      setProjectName(newProjectName)
+    }
   }
 
   const handleRepoNameChange = event => {
-    setRepoName(event.target.value)
+    const newRepoName = event.target.value
+    if (newRepoName.length > 100) {
+      setRepoNameError(
+        'A Git repository name cannot be longer than 100 characters'
+      )
+    } else if (
+      newRepoName.length >= 1 &&
+      !/^[A-Za-z0-9_.-]+$/.test(newRepoName)
+    ) {
+      setRepoNameError(
+        'Git repository names cannot include special characters other than a hyphen ("-"), underscore ("_"), or full-stop (".").'
+      )
+    } else {
+      setRepoNameError('')
+      setRepoName(newRepoName)
+    }
   }
 
   const handleRedirectURLChange = event => {
-    setRedirectUrl(event.target.value)
+    const newRedirectURL = event.target.value
+    if (newRedirectURL.length >= 1 && !validateURL(newRedirectURL)) {
+      setRedirectUrlError('Redirect URL must be a valid URL.')
+    } else {
+      setRedirectUrlError('')
+      setRedirectUrl(newRedirectURL)
+    }
   }
 
   const handleDeveloperIDChange = event => {
@@ -92,12 +162,24 @@ export default function DeployButtonGenerator() {
   const envValues = filteredEnv.map(envVar => envVar.value).toString()
 
   useEffect(() => {
-    if (hasEnv && envDescription === '' && envLink !== '') {
+    if (hasEnv === false && envLink !== '') {
+      setEnvLinkError(
+        'An Environment Variable Link needs Required Environment Variables.'
+      )
+    } else if (hasEnv && envDescription === '' && envLink !== '') {
       setEnvLinkError(
         'An Environment Variable Link requires an Environment Variables Description.'
       )
     } else {
       setEnvLinkError('')
+    }
+
+    if (hasEnv === false && envDescription !== '') {
+      setEnvDescriptionError(
+        'An Environment Variable Link needs Required Environment Variables.'
+      )
+    } else {
+      setEnvDescriptionError('')
     }
   }, [env, envDescription, envLink])
 
@@ -333,10 +415,12 @@ export default function DeployButtonGenerator() {
               documentation tha helps users understand what they are filling
               Environment Variables for.
             </Text>
+            <Spacer />
             <Input
               label="Environment Variables Description"
               placeholder="Enter your API Keys to deploy"
               onChange={handleEnvDescChange}
+              error={envDescriptionError}
             />
             <Spacer />
             <Input
@@ -357,14 +441,16 @@ export default function DeployButtonGenerator() {
             </Text>
             <Input
               label="Default Project Name"
-              placeholder="My Awesome Project"
+              placeholder="my-awesome-project"
               onChange={handleProjectNameChange}
+              error={projectNameError}
             />
             <Spacer />
             <Input
-              label="Default Repository Name"
+              label="Default Git Repository Name"
               placeholder="my-awesome-project"
               onChange={handleRepoNameChange}
+              error={repoNameError}
             />
           </Details>
         </div>
@@ -379,6 +465,7 @@ export default function DeployButtonGenerator() {
               label="Redirect URL"
               placeholder="https://myheadlessproject.com"
               onChange={handleRedirectURLChange}
+              error={redirectUrlError}
             />
             <Spacer />
             <Text small>
