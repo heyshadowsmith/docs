@@ -16,7 +16,10 @@
 
 .envRow {
   display: flex;
-  align-items: center;
+}
+
+.envInput {
+  width: 100%;
 }
 
 .envRow .envRemove {

@@ -6,6 +6,7 @@ import Details from '~/components/details'
 import Input from '~/components/input'
 import Button from '~/components/buttons'
 import Spacer from '~/components/spacer'
+import ErrorMessage from '~/components/error'
 import Container from '~/components/layout/container'
 import Caption from '~/components/text/caption'
 import Label from '~/components/label'
@@ -40,7 +41,8 @@ export default function DeployButtonGenerator() {
     'https://github.com/vercel/next.js/tree/canary/examples/hello-world'
   const [selected, setSelected] = useState('markdown')
   const [repository, setRepository] = useState(defaultRepo)
-  const [env, setEnv] = useState([{ value: '', id: generateId() }])
+  const [env, setEnv] = useState([{ value: '', id: generateId(), error: '' }])
+  const [envError, setEnvError] = useState('')
   const [envDescription, setEnvDescription] = useState('')
   const [envDescriptionError, setEnvDescriptionError] = useState('')
   const [envLink, setEnvLink] = useState('')
@@ -64,6 +66,14 @@ export default function DeployButtonGenerator() {
 
   const handleAddEnv = event => {
     event.preventDefault()
+
+    if (env.length === 100) {
+      setEnvError(
+        'There cannot be more than 100 Environment Variables per project.'
+      )
+      return
+    }
+
     setEnv([...env, { value: '', id: generateId() }])
   }
 
@@ -76,14 +86,24 @@ export default function DeployButtonGenerator() {
 
   const handleChangeEnv = (index, value) => {
     let newEnvs = [...env]
+    if (value.length > 256) {
+      newEnvs[index].error =
+        'Environment Variable keys cannot be longer than 256 characters.'
+    } else if (value.length >= 1 && !/^[a-zA-Z][a-zA-Z0-9_]*$/.test(value)) {
+      newEnvs[index].error =
+        'Environment Variable keys must start with a letter and use no special characters other than underscores ("_").'
+    } else {
+      newEnvs[index].error = ''
+    }
+
     newEnvs[index].value = value
     setEnv(newEnvs)
   }
 
   const handleEnvDescChange = event => {
-    if (hasEnv && event.target.value.length > 255) {
+    if (hasEnv && event.target.value.length > 256) {
       setEnvDescriptionError(
-        'The Environment Variables description must be 255 characters or less.'
+        'The Environment Variables description must be 256 characters or less.'
       )
     } else {
       setEnvDescriptionError('')
@@ -162,6 +182,8 @@ export default function DeployButtonGenerator() {
   const envValues = filteredEnv.map(envVar => envVar.value).toString()
 
   useEffect(() => {
+    setEnvError('')
+
     if (hasEnv === false && envLink !== '') {
       setEnvLinkError(
         'An Environment Variable Link needs Required Environment Variables.'
@@ -379,14 +401,17 @@ export default function DeployButtonGenerator() {
               {env.map((envVar, index) => (
                 <>
                   <div className={styles.envRow} key={envVar.id}>
-                    <Input
-                      placeholder="MY_API_KEY"
-                      width="100%"
-                      value={envVar.value}
-                      onChange={event =>
-                        handleChangeEnv(index, event.target.value)
-                      }
-                    />
+                    <div className={styles.envInput}>
+                      <Input
+                        placeholder="MY_API_KEY"
+                        width="100%"
+                        value={envVar.value}
+                        error={envVar.error}
+                        onChange={event =>
+                          handleChangeEnv(index, event.target.value)
+                        }
+                      />
+                    </div>
                     <Spacer x={0.5} />
                     <Button
                       disabled={env.length === 1}
@@ -400,6 +425,15 @@ export default function DeployButtonGenerator() {
                   <Spacer />
                 </>
               ))}
+              {envError && (
+                <>
+                  <ErrorMessage style={{ width: '100%' }}>
+                    {envError}
+                  </ErrorMessage>
+                  <Spacer />
+                </>
+              )}
+
               <Button onClick={handleAddEnv}>Add Environment Variable</Button>
             </div>
             <Spacer />
