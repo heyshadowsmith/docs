@@ -26,8 +26,6 @@ const AmpImg = ({
   layout = 'responsive'
 }) => {
   const isAmp = useAmp()
-  console.log('amp-img height', height)
-  console.log('amp-img width', width)
 
   const hasDimension = typeof width === 'number' && typeof height === 'number'
 
