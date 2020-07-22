@@ -192,11 +192,11 @@ To declare an Environment Variable for your deployment, head to the **General** 
 
 First, choose between the following **Environments**:
 
-| Environment     | Description                                                                                                                                                                                           |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Production**  | When selected, the Environment Variable will be applied to your next Production Deployment. To create a Production Deployment, push a commit to the default branch or run `vercel --prod`.            |
-| **Preview**     | The Environment Variable is applied to your next Preview Deployment. Preview Deployments are created when you push to a branch (for example, `my-new-feature`) or run `vercel`.                       |
-| **Development** | The Environment Variable is for use when running your project locally, with `vercel dev` or your preferred development command. To download Development Environment Variables, run `vercel env pull`. |
+| Environment     | Description                                                                                                                                                                                                                                  |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Production**  | When selected, the Environment Variable will be applied to your next Production Deployment. To create a Production Deployment, push a commit to the [Production Branch](/docs/v2/git-integrations#production-branch) or run `vercel --prod`. |
+| **Preview**     | The Environment Variable is applied to your next Preview Deployment. Preview Deployments are created when you push to a branch (for example, `my-new-feature`) or run `vercel`.                                                              |
+| **Development** | The Environment Variable is for use when running your project locally, with `vercel dev` or your preferred development command. To download Development Environment Variables, run `vercel env pull`.                                        |
 
 Enter the **Name** of the Environment Variable. For example, if you are using Node.js and you create an Environment Variable named `SENTRY_KEY`, it will be available under `process.env.SENTRY_KEY` in your code.
 
@@ -261,8 +261,8 @@ To apply a System Environment Variable to your Deployment, enter its **Name**, l
 
 <Image
   src={`${process.env.ASSETS}/docs/build-step/env-vars-system.png`}
-  width={1488 / 2}
-  height={632 / 2}
+  width={1458 / 2}
+  height={740 / 2}
   shadow
 />
 <Caption>Adding a System Environment Variable in the Project Settings.</Caption>
@@ -274,6 +274,26 @@ The following System Environment Variables are available:
 ### Reserved Environment Variables
 
 The <ProductName /> platform reserves the usage of some Environment Variable names by default. You can find a list of these names in the [limits documentation](/docs/v2/platform/limits/#reserved-variables).
+
+### Using a `.env` file
+
+Another option for configuring environment variables is to use a `.env` file, which is a file that contains environment variables on new lines in the form of `NAME=VALUE`. For example:
+
+```
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=s1mpl3
+```
+
+Some frontend frameworks, for example [Next.js](https://nextjs.org/docs/basic-features/environment-variables#environment-variables-on-vercel), support loading environment variables from a `.env` file out-of-the-box.
+
+For Node.js serverless functions, you may use the [`dotenv`](https://npmjs.com/dotenv) module in your code to enable loading environment variables from a `.env` file.
+
+<Note>
+  When deploying to Vercel, environment variables configured in the Environment
+  Variables settings for your project will take precedence over values defined
+  in the <code>.env</code> file.
+</Note>
 
 ## Ignored Files and Folders
 
