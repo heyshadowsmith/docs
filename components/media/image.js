@@ -40,6 +40,18 @@ const AmpImg = ({
     ) : (
       <div className="amp-img-fixed-container">
         <amp-img layout="fill" {...{ src, srcSet, alt, title }} />
+        <style jsx>{`
+          .amp-img-fixed-container {
+            width: 100%;
+            height: 200px;
+            position: relative;
+          }
+
+          .amp-img-fixed-container amp-img img,
+          .amp-img-fixed-container amp-img {
+            object-fit: contain;
+          }
+        `}</style>
       </div>
     )
   return children
@@ -210,17 +222,6 @@ class Image extends Component {
               figure.contained main .container img {
                 position: relative;
                 height: auto;
-              }
-
-              .amp-img-fixed-container {
-                width: 100%;
-                height: 200px;
-                position: relative;
-              }
-
-              .amp-img-fixed-container amp-img img,
-              .amp-img-fixed-container amp-img {
-                object-fit: contain;
               }
             `}</style>
           </figure>
