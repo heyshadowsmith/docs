@@ -22,13 +22,26 @@ const AmpImg = ({
   height,
   width,
   alt,
+  title,
   layout = 'responsive'
 }) => {
   const isAmp = useAmp()
   console.log('amp-img height', height)
   console.log('amp-img width', width)
+
+  const hasDimension = typeof width === 'number' && typeof height === 'number'
+
   if (isAmp)
-    return <amp-img layout={layout} {...{ src, srcSet, height, width, alt }} />
+    return hasDimension ? (
+      <amp-img
+        layout={layout}
+        {...{ src, srcSet, height, width, alt, title }}
+      />
+    ) : (
+      <div className="amp-img-fixed-container">
+        <amp-img layout="fill" {...{ src, srcSet, alt, title }} />
+      </div>
+    )
   return children
 }
 
@@ -42,8 +55,8 @@ class Image extends Component {
   }
 
   static propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
+    width: PropTypes.number,
+    height: PropTypes.number
   }
 
   state = {
@@ -78,12 +91,9 @@ class Image extends Component {
 
     const hasDimension = typeof width === 'number' && typeof height === 'number'
 
-    const noDimensionFixedWidth = 400
-    const noDimensionFixedHeight = 300
-
     const aspectRatio = hasDimension
       ? String((height / width) * 100) + '%'
-      : noDimensionFixedHeight
+      : undefined
     const classes =
       width > 768 && oversize ? 'oversize' : !hasDimension ? 'contained' : ''
 
@@ -93,10 +103,10 @@ class Image extends Component {
 
     return (
       <AmpImg
-        layout={hasDimension ? layout : 'fill'}
+        layout={layout}
         {...this.props}
-        width={hasDimension ? width : noDimensionFixedWidth}
-        height={hasDimension ? height : noDimensionFixedHeight}
+        width={hasDimension ? width : undefined}
+        height={hasDimension ? height : undefined}
       >
         <IObserver
           once
@@ -105,15 +115,13 @@ class Image extends Component {
           disabled={!lazy}
         >
           <figure className={cn(classes, { 'has-shadow': shadow })}>
-            <main
-              style={{ width: hasDimension ? width : noDimensionFixedWidth }}
-            >
+            <main style={{ width: hasDimension ? width : undefined }}>
               <div className="container" style={{ paddingBottom: aspectRatio }}>
                 {this.state.src ? (
                   <img
                     src={this.state.src || null}
-                    width={hasDimension ? width : noDimensionFixedWidth}
-                    height={hasDimension ? height : noDimensionFixedHeight}
+                    width={hasDimension ? width : undefined}
+                    height={hasDimension ? height : undefined}
                     title={title}
                     alt={alt}
                   />
@@ -200,8 +208,18 @@ class Image extends Component {
               }
 
               figure.contained main .container img {
+                position: relative;
+                height: auto;
+              }
+
+              .amp-img-fixed-container {
+                width: 100%;
+                height: 300px;
+              }
+
+              .amp-img-fixed-container img,
+              .amp-img-fixed-container amp-img {
                 object-fit: contain;
-                object-position: 50% 100%;
               }
             `}</style>
           </figure>

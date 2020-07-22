@@ -10,7 +10,7 @@ const RemarkImage = ({
   ...props
 }) => {
   return (
-    <div>
+    <>
       {href ? (
         <a href={href} target={target} rel="noopener">
           <Image {...props} />
@@ -28,7 +28,7 @@ const RemarkImage = ({
       </RemarkCaption>
 
       <style jsx>{``}</style>
-    </div>
+    </>
   )
 }
 
