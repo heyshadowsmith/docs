@@ -38,9 +38,7 @@ class Image extends Component {
   }
 
   static defaultProps = {
-    lazy: true,
-    width: '100%',
-    height: 0
+    lazy: true
   }
 
   static propTypes = {
@@ -78,15 +76,28 @@ class Image extends Component {
       alt
     } = this.props
 
-    const aspectRatio = String((height / width) * 100) + '%'
-    const classes = width > 768 && oversize ? 'oversize' : ''
+    const hasDimension = typeof width === 'number' && typeof height === 'number'
+
+    const noDimensionFixedWidth = 800
+    const noDimensionFixedHeight = 600
+
+    const aspectRatio = hasDimension
+      ? String((height / width) * 100) + '%'
+      : undefined
+    const classes =
+      width > 768 && oversize ? 'oversize' : !hasDimension ? 'contained' : ''
 
     if (video || videoSrc) {
       return <VideoComponent src={videoSrc} {...this.props} />
     }
-    console.log('AmpImg', this.props)
+
     return (
-      <AmpImg layout={layout} {...this.props}>
+      <AmpImg
+        layout={hasDimension ? layout : 'fill'}
+        {...this.props}
+        width={hasDimension ? width : noDimensionFixedWidth}
+        height={hasDimension ? height : noDimensionFixedHeight}
+      >
         <IObserver
           once
           onIntersect={this.handleIntersect}
@@ -99,8 +110,8 @@ class Image extends Component {
                 {this.state.src ? (
                   <img
                     src={this.state.src || null}
-                    width={width}
-                    height={height}
+                    width={hasDimension ? width : noDimensionFixedWidth}
+                    height={hasDimension ? height : noDimensionFixedHeight}
                     title={title}
                     alt={alt}
                   />
@@ -178,6 +189,14 @@ class Image extends Component {
                   margin: ${margin}px 0 ${margin}px
                     calc(((${width}px - 768px) / 2) * -1);
                 }
+              }
+
+              figure.contained main .container {
+                position: relative;
+              }
+
+              figure.contained main .container img {
+                position: relative;
               }
             `}</style>
           </figure>
