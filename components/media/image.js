@@ -45,7 +45,7 @@ const AmpImg = ({
             position: relative;
           }
 
-          .amp-img-fixed-container amp-img img,
+          .amp-img-fixed-container amp-img :global(img),
           .amp-img-fixed-container amp-img {
             object-fit: contain;
           }
