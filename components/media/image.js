@@ -119,6 +119,7 @@ class Image extends Component {
         {...this.props}
         width={hasDimension ? width : undefined}
         height={hasDimension ? height : undefined}
+        margin={margin}
       >
         <IObserver
           once
