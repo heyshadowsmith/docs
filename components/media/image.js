@@ -23,6 +23,7 @@ const AmpImg = ({
   width,
   alt,
   title,
+  margin,
   layout = 'responsive'
 }) => {
   const isAmp = useAmp()
@@ -43,6 +44,7 @@ const AmpImg = ({
             width: 100%;
             height: 200px;
             position: relative;
+            margin: ${margin}px 0;
           }
 
           .amp-img-fixed-container amp-img :global(img),
