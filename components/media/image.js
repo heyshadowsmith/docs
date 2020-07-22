@@ -214,10 +214,11 @@ class Image extends Component {
 
               .amp-img-fixed-container {
                 width: 100%;
-                height: 300px;
+                height: 200px;
+                position: relative;
               }
 
-              .amp-img-fixed-container img,
+              .amp-img-fixed-container amp-img img,
               .amp-img-fixed-container amp-img {
                 object-fit: contain;
               }
