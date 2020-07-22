@@ -3,7 +3,7 @@ import { useAmp } from 'next/amp'
 import Tabs from '~/components/tabs'
 import Snippet from '~/components/snippet'
 import Details from '~/components/details'
-import Input, { Clearable } from '~/components/input'
+import { Clearable } from '~/components/input'
 import Button from '~/components/buttons'
 import Spacer from '~/components/spacer'
 import ErrorMessage from '~/components/error'
@@ -418,7 +418,7 @@ export default function DeployButtonGenerator() {
                 <>
                   <div className={styles.envRow} key={envVar.id}>
                     <div className={styles.envInput}>
-                      <Input
+                      <Clearable
                         placeholder="MY_API_KEY"
                         width="100%"
                         value={envVar.value}
@@ -466,14 +466,14 @@ export default function DeployButtonGenerator() {
               Environment Variables for.
             </Text>
             <Spacer />
-            <Input
+            <Clearable
               label="Environment Variables Description"
               placeholder="Enter your API Keys to deploy"
               onChange={handleEnvDescChange}
               error={envDescriptionError}
             />
             <Spacer />
-            <Input
+            <Clearable
               label="Environment Variables Link"
               placeholder="https://myheadlessproject.com/docs/env-vars"
               onChange={handleEnvLinkChange}
@@ -489,14 +489,14 @@ export default function DeployButtonGenerator() {
               know what name the user likely wants, enter a default project
               name. Additionally fill this is for the repository name.
             </Text>
-            <Input
+            <Clearable
               label="Default Project Name"
               placeholder="my-awesome-project"
               onChange={handleProjectNameChange}
               error={projectNameError}
             />
             <Spacer />
-            <Input
+            <Clearable
               label="Default Git Repository Name"
               placeholder="my-awesome-project"
               onChange={handleRepoNameChange}
@@ -511,7 +511,7 @@ export default function DeployButtonGenerator() {
               The Redirect URL parameter allows you to redirect the user back to
               your platform on the event of a successful deployment.
             </Text>
-            <Input
+            <Clearable
               label="Redirect URL"
               placeholder="https://myheadlessproject.com"
               onChange={handleRedirectURLChange}
@@ -530,7 +530,7 @@ export default function DeployButtonGenerator() {
               <Link href="/docs/integrations">Integration</Link> by using its
               Client ID, found in the Integration Developer Console.
             </Text>
-            <Input
+            <Clearable
               label="Developer ID"
               placeholder="oac_7rUTiCMow23Gyfao9RQQ3Es2"
               onChange={handleDeveloperIDChange}
