@@ -396,13 +396,10 @@ export default function DeployButtonGenerator() {
       </Heading>
 
       <Text>
-        Use the following generator to configure the Deploy Button URL,
-        generated in the above snippet.
-      </Text>
-
-      <Text>
-        Start with the public template repository URL from GitHub, GitLab, or
-        Bitbucket you want to use as a source for users to clone and deploy.
+        Generate your own Deploy Button in the{' '}
+        <Link href="#snippets">Snippets</Link> above, starting with the source
+        public template repository URL from GitHub, GitLab, or Bitbucket that
+        users clone and deploy.
       </Text>
 
       <div className={styles.settingsForm}>
@@ -427,6 +424,12 @@ export default function DeployButtonGenerator() {
             </Text>
           </div>
         </div>
+
+        <Text>
+          Additionally you can customize your deployment by adding the
+          configuration that your project needs. For more information go to the{' '}
+          <Link href="#url-parameter-reference">URL Parameter Reference</Link>.
+        </Text>
 
         <div className={styles.settingsSection}>
           <Details title="Environment Variables">
