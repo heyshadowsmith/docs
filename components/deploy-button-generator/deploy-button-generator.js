@@ -24,7 +24,7 @@ function validateURL(str) {
     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
     '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
     '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+    '(\\?[;a-z\\d%_.~+=-]*)?' + // query string
       '(\\#[-a-z\\d_]*)?$',
     'i'
   ) // fragment locator
@@ -52,6 +52,8 @@ export default function DeployButtonGenerator() {
   const [redirectUrlError, setRedirectUrlError] = useState('')
   const [developerId, setDeveloperId] = useState('')
   const [developerIdError, setDeveloperIdError] = useState('')
+  const [deployHook, setDeployHook] = useState('')
+  const [deployHookError, setDeployHookError] = useState('')
   const [projectName, setProjectName] = useState('')
   const [projectNameError, setProjectNameError] = useState('')
   const [repoName, setRepoName] = useState('')
@@ -83,9 +85,9 @@ export default function DeployButtonGenerator() {
   const handleAddEnv = event => {
     event.preventDefault()
 
-    if (env.length === 100) {
+    if (env.length === 10) {
       setEnvError(
-        'There cannot be more than 100 Environment Variables per project.'
+        'There cannot be more than 10 Environment Variables per project.'
       )
       return
     }
@@ -193,6 +195,10 @@ export default function DeployButtonGenerator() {
     setDeveloperId(event.target.value)
   }
 
+  const handleDeployHookChange = event => {
+    setDeployHook(event.target.value)
+  }
+
   const filteredEnv = env.filter(envVar => envVar.value !== '')
   const hasEnv = filteredEnv.length !== 0
   const envValues = filteredEnv.map(envVar => envVar.value).toString()
@@ -227,6 +233,12 @@ export default function DeployButtonGenerator() {
     } else {
       setDeveloperIdError('')
     }
+
+    if (redirectUrl === '' && deployHook !== '') {
+      setDeployHookError('A Deploy Hook requires an Redirect URL.')
+    } else {
+      setDeployHookError('')
+    }
   }, [redirectUrl, developerId])
 
   const completeUrl = `${importUrl}?s=${encodeURIComponent(
@@ -239,7 +251,11 @@ export default function DeployButtonGenerator() {
     projectName ? `&project-name=${encodeURIComponent(projectName)}` : ''
   }${repoName ? `&repo-name=${encodeURIComponent(repoName)}` : ''}${
     redirectUrl ? `&redirect-url=${encodeURIComponent(redirectUrl)}` : ''
-  }${developerId ? `&developer-id=${developerId}` : ''}`
+  }${redirectUrl && developerId ? `&developer-id=${developerId}` : ''}${
+    redirectUrl && deployHook
+      ? `&production-deploy-hook=${encodeURIComponent(deployHook)}`
+      : ''
+  }`
 
   const completeHTMLUrl = (
     <span>
@@ -274,9 +290,14 @@ export default function DeployButtonGenerator() {
           &amp;<b>redirect-url={encodeURIComponent(redirectUrl)}</b>
         </>
       ) : null}
-      {developerId ? (
+      {redirectUrl && developerId ? (
         <>
           &amp;<b>developer-id={developerId}</b>
+        </>
+      ) : null}
+      {redirectUrl && deployHook ? (
+        <>
+          &amp;<b>production-deploy-hook={encodeURIComponent(deployHook)}</b>
         </>
       ) : null}
     </span>
@@ -396,20 +417,22 @@ export default function DeployButtonGenerator() {
             />
           </Container>
 
-          <Spacer />
-          <Text small>
-            <Link href="#repository-url">
-              Learn more about the Git Repository URL parameter
-            </Link>
-            .
-          </Text>
+          <Spacer y={0.5} />
+          <div className={styles.learnMoreLink}>
+            <Text small>
+              Learn more about{' '}
+              <Link href="#repository-url">
+                the Git Repository URL parameter →
+              </Link>
+            </Text>
+          </div>
         </div>
 
         <div className={styles.settingsSection}>
           <Details title="Environment Variables">
-            <Text id="env-description">
-              Define Environment Variable Keys that requires the user to fill in
-              values for what the app needs to run.
+            <Text small id="env-description">
+              Define Environment Variable Keys that the app needs. The values
+              will be filled in by the user.
             </Text>
             <Spacer />
             <Label value="Environment Variables Keys" elId="env-label" />
@@ -428,7 +451,7 @@ export default function DeployButtonGenerator() {
                         }
                       />
                     </div>
-                    <Spacer x={0.5} />
+                    <Spacer x={0.4} />
                     <Button
                       disabled={env.length === 1}
                       type="secondary"
@@ -438,7 +461,7 @@ export default function DeployButtonGenerator() {
                       onClick={event => handleRemoveEnv(index, event)}
                     />
                   </div>
-                  <Spacer />
+                  <Spacer y={0.5} />
                 </>
               ))}
               {envError && (
@@ -452,23 +475,25 @@ export default function DeployButtonGenerator() {
 
               <Button onClick={handleAddEnv}>Add Environment Variable</Button>
             </div>
-            <Spacer />
-            <Text small>
-              <Link href="#required-environment-variables">
-                Learn more about the Environment Variable parameters
-              </Link>
-              .
-            </Text>
+            <Spacer y={0.5} />
+            <div className={styles.learnMoreLink}>
+              <Text small>
+                Learn more about{' '}
+                <Link href="#required-environment-variables">
+                  the Environment Variable parameters →
+                </Link>
+              </Text>
+            </div>
             <HR spacing={24} />
-            <Text id="env-description">
-              Add additional information through a description and link to
-              documentation that helps users understand what they are filling
-              Environment Variables for.
+            <Text small id="env-description">
+              Add a description with additional information and a link to
+              documentation that helps users understand what they are providing
+              values for.
             </Text>
             <Spacer />
             <Clearable
               label="Environment Variables Description"
-              placeholder="Enter your API Keys to deploy"
+              placeholder="API Keys needed for the application."
               onChange={handleEnvDescChange}
               error={envDescriptionError}
             />
@@ -484,11 +509,12 @@ export default function DeployButtonGenerator() {
 
         <div className={styles.settingsSection}>
           <Details title="Defaults">
-            <Text>
+            <Text small>
               If you're setting up a project on behalf of the user and already
               know what name the user likely wants, enter a default project
               name. Additionally fill this is for the repository name.
             </Text>
+            <Spacer />
             <Clearable
               label="Default Project Name"
               placeholder="my-awesome-project"
@@ -507,42 +533,66 @@ export default function DeployButtonGenerator() {
 
         <div className={styles.settingsSection}>
           <Details title="Redirect">
-            <Text>
+            <Text small>
               The Redirect URL parameter allows you to redirect the user back to
-              your platform on the event of a successful deployment.
+              your platform on the event of a successful deployment and receive
+              information on the created project.
             </Text>
+            <Spacer />
             <Clearable
               label="Redirect URL"
               placeholder="https://myheadlessproject.com"
               onChange={handleRedirectURLChange}
               error={redirectUrlError}
             />
-            <Spacer />
-            <Text small>
-              <Link href="#redirect-url">
-                Learn more about the Redirect URL parameter
-              </Link>
-              , including information Vercel passes on.
-            </Text>
+            <Spacer y={0.5} />
+            <div className={styles.learnMoreLink}>
+              <Text small>
+                Learn more about{' '}
+                <Link href="#redirect-url">the Redirect URL parameter →</Link>
+              </Text>
+            </div>
             <HR spacing={16} />
-            <Text>
+            <Text small>
               Set a Developer ID to show a logo and name from an{' '}
               <Link href="/docs/integrations">Integration</Link> by using its
               Client ID, found in the Integration Developer Console.
             </Text>
+            <Spacer />
             <Clearable
               label="Developer ID"
               placeholder="oac_7rUTiCMow23Gyfao9RQQ3Es2"
               onChange={handleDeveloperIDChange}
               error={developerIdError}
             />
-            <Spacer />
+            <Spacer y={0.5} />
+            <div className={styles.learnMoreLink}>
+              <Text small>
+                Learn more about{' '}
+                <Link href="#developer-id">the Developer ID parameter →</Link>
+              </Text>
+            </div>
+            <HR spacing={16} />
             <Text small>
-              <Link href="#developer-id">
-                Learn more about the Developer ID parameter
-              </Link>
-              .
+              Set a name for a{' '}
+              <Link href="/docs/v2/more/deploy-hooks">Deploy Hook</Link> to
+              receive a Deploy Hook URL in return when redirecting the user from
+              the import flow.
             </Text>
+            <Spacer />
+            <Clearable
+              label="Deploy Hook Name"
+              placeholder="Headless Project Deploy"
+              onChange={handleDeployHookChange}
+              error={deployHookError}
+            />
+            <Spacer y={0.5} />
+            <div className={styles.learnMoreLink}>
+              <Text small>
+                Learn more about{' '}
+                <Link href="#deploy-hook">the Deploy Hook parameter →</Link>
+              </Text>
+            </div>
           </Details>
         </div>
       </div>
