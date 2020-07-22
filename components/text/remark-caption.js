@@ -18,14 +18,14 @@ const RemarkCaption = ({
     </RemarkRenderer>
     <style jsx>
       {`
-        p {
+        .caption {
           color: var(--accents-5);
           line-height: var(--line-height-small);
           margin: -24px 0 40px 0;
           text-align: center;
         }
 
-        p :global(div p) {
+        .caption :global(div p) {
           font-size: var(--font-size-small);
         }
       `}
