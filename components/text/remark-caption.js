@@ -7,7 +7,7 @@ const RemarkCaption = ({
   components: customComponents,
   ...props
 }) => (
-  <p {...props} className="caption">
+  <div {...props} className="caption">
     <RemarkRenderer
       components={{
         ...components,
@@ -30,7 +30,7 @@ const RemarkCaption = ({
         }
       `}
     </style>
-  </p>
+  </div>
 )
 
 // const Code = ({ children }) => (
