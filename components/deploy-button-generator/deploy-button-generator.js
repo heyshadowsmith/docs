@@ -3,7 +3,7 @@ import { useAmp } from 'next/amp'
 import Tabs from '~/components/tabs'
 import Snippet from '~/components/snippet'
 import Details from '~/components/details'
-import Input from '~/components/input'
+import Input, { Clearable } from '~/components/input'
 import Button from '~/components/buttons'
 import Spacer from '~/components/spacer'
 import ErrorMessage from '~/components/error'
@@ -41,6 +41,7 @@ export default function DeployButtonGenerator() {
     'https://github.com/vercel/next.js/tree/canary/examples/hello-world'
   const [selected, setSelected] = useState('markdown')
   const [repository, setRepository] = useState(defaultRepo)
+  const [repositoryError, setRepositoryError] = useState('')
   const [env, setEnv] = useState([{ value: '', id: generateId(), error: '' }])
   const [envError, setEnvError] = useState('')
   const [envDescription, setEnvDescription] = useState('')
@@ -61,7 +62,22 @@ export default function DeployButtonGenerator() {
   const onRepositoryChange = event => {
     const newRepo = event.target.value
 
-    setRepository(newRepo)
+    if (newRepo.length >= 1 && !validateURL(newRepo)) {
+      setRepositoryError('The Git Repository must be a valid URL.')
+    } else if (
+      newRepo.length >= 1 &&
+      validateURL(newRepo) &&
+      !newRepo.includes('github.com') &&
+      !newRepo.includes('bitbucket.com') &&
+      !newRepo.includes('gitlab.com')
+    ) {
+      setRepositoryError(
+        'The Git Repository must be a URL for a repository on GitHub, Bitbucket, or GitLab.'
+      )
+    } else {
+      setRepositoryError('')
+      setRepository(newRepo)
+    }
   }
 
   const handleAddEnv = event => {
@@ -213,9 +229,9 @@ export default function DeployButtonGenerator() {
     }
   }, [redirectUrl, developerId])
 
-  const completeUrl = `${importUrl}?s=${repository || defaultRepo}${
-    hasEnv ? `&env=${envValues}` : ''
-  }${
+  const completeUrl = `${importUrl}?s=${encodeURIComponent(
+    repository || defaultRepo
+  )}${hasEnv ? `&env=${envValues}` : ''}${
     hasEnv && envDescription
       ? `&envDescription=${encodeURIComponent(envDescription)}`
       : ''
@@ -227,7 +243,7 @@ export default function DeployButtonGenerator() {
 
   const completeHTMLUrl = (
     <span>
-      {importUrl}?<b>s={repository || defaultRepo}</b>
+      {importUrl}?<b>s={encodeURIComponent(repository || defaultRepo)}</b>
       {hasEnv ? (
         <>
           &amp;<b>env={envValues}</b>
@@ -371,12 +387,12 @@ export default function DeployButtonGenerator() {
       <div className={styles.settingsForm}>
         <div className={styles.settingsSection}>
           <Container>
-            <Input
+            <Clearable
               placeholder={defaultRepo}
-              defaultValue={defaultRepo}
               width="100%"
               label="Git Repository"
               onChange={onRepositoryChange}
+              error={repositoryError}
             />
           </Container>
 
@@ -446,7 +462,7 @@ export default function DeployButtonGenerator() {
             <HR spacing={24} />
             <Text id="env-description">
               Add additional information through a description and link to
-              documentation tha helps users understand what they are filling
+              documentation that helps users understand what they are filling
               Environment Variables for.
             </Text>
             <Spacer />
