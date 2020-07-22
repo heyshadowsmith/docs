@@ -78,8 +78,8 @@ class Image extends Component {
 
     const hasDimension = typeof width === 'number' && typeof height === 'number'
 
-    const noDimensionFixedWidth = '80vmin'
-    const noDimensionFixedHeight = '40vmin'
+    const noDimensionFixedWidth = 400
+    const noDimensionFixedHeight = 300
 
     const aspectRatio = hasDimension
       ? String((height / width) * 100) + '%'
