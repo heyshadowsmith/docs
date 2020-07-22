@@ -476,7 +476,9 @@ export default function DeployButtonGenerator() {
                 </>
               )}
 
-              <Button onClick={handleAddEnv}>Add Environment Variable</Button>
+              <Button medium onClick={handleAddEnv}>
+                Add Environment Variable
+              </Button>
             </div>
             <Spacer y={0.5} />
             <div className={styles.learnMoreLink}>
