@@ -78,12 +78,12 @@ class Image extends Component {
 
     const hasDimension = typeof width === 'number' && typeof height === 'number'
 
-    const noDimensionFixedWidth = 800
-    const noDimensionFixedHeight = 600
+    const noDimensionFixedWidth = '80vmin'
+    const noDimensionFixedHeight = '40vmin'
 
     const aspectRatio = hasDimension
       ? String((height / width) * 100) + '%'
-      : undefined
+      : noDimensionFixedHeight
     const classes =
       width > 768 && oversize ? 'oversize' : !hasDimension ? 'contained' : ''
 
@@ -105,7 +105,9 @@ class Image extends Component {
           disabled={!lazy}
         >
           <figure className={cn(classes, { 'has-shadow': shadow })}>
-            <main style={{ width }}>
+            <main
+              style={{ width: hasDimension ? width : noDimensionFixedWidth }}
+            >
               <div className="container" style={{ paddingBottom: aspectRatio }}>
                 {this.state.src ? (
                   <img
@@ -191,12 +193,15 @@ class Image extends Component {
                 }
               }
 
+              figure.contained {
+              }
+
               figure.contained main .container {
-                position: relative;
               }
 
               figure.contained main .container img {
-                position: relative;
+                object-fit: contain;
+                object-position: 50% 100%;
               }
             `}</style>
           </figure>
