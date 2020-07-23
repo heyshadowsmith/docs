@@ -57,6 +57,19 @@ const Code = ({ className, children }, { darkBg } = {}) => {
           content: none;
         }
 
+
+
+        :global(pre) code.language-shell,
+        :global(pre) code.language-console,
+        :global(pre) code.language-bash,
+        :global(pre) code.language-sh,
+        :global(pre) code.language-zsh {
+          color: #fff;
+          background: transparent;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+        }
+
         :global(pre) code.language-shell :global(ul),
         :global(pre) code.language-console :global(ul),
         :global(pre) code.language-bash :global(ul),
@@ -96,14 +109,7 @@ const Code = ({ className, children }, { darkBg } = {}) => {
         }
 
 
-        :global(pre) code.language-shell,
-        :global(pre) code.language-console,
-        :global(pre) code.language-bash,
-        :global(pre) code.language-sh,
-        :global(pre) code.language-zsh {
-          color: #fff;
-          background: transparent;
-        }
+        
 
         :global(pre) code.language-shell :global(span.token.function),
         :global(pre) code.language-console :global(span.token.function),
