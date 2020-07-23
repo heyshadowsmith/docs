@@ -105,6 +105,25 @@ const Code = ({ className, children }, { darkBg } = {}) => {
           background: transparent;
         }
 
+        :global(pre) code.language-shell :global(span.token.function),
+        :global(pre) code.language-console :global(span.token.function),
+        :global(pre) code.language-bash :global(span.token.function),
+        :global(pre) code.language-sh :global(span.token.function),
+        :global(pre) code.language-zsh :global(span.token.function) {
+          color: #fff;
+          font-weight: bold;
+        }
+
+        :global(pre) code.language-shell :global(span.token.string),
+        :global(pre) code.language-console :global(span.token.string),
+        :global(pre) code.language-bash :global(span.token.string),
+        :global(pre) code.language-sh :global(span.token.string),
+        :global(pre) code.language-zsh :global(span.token.string) {
+          color: #fff;
+          opacity: 0.8;
+          font-style: italic;
+        }
+
         
 
 

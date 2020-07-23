@@ -19,7 +19,7 @@ const Pre = ({ className, children }) => (
         pre.language-bash,
         pre.language-sh,
         pre.language-zsh {
-          background: #2f2f2f;
+          background: #000;
           border-color: #333;
         }
       `}
