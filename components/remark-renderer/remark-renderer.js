@@ -20,19 +20,6 @@ const RemarkRenderer = ({
   const renderMarkdown = md => {
     const markdownProcessor = unified()
       .use(markdown)
-      //.use(codeFrontmatter)
-      //.use(() => transformer)
-      // .use(() => transformer)
-      // .use(codeExtra, {
-      //   transform: node => {
-      //     if (node.type === 'code' && ['shell', 'sh', 'bash', 'console', 'zsh'].includes(node.lang)) {
-      //       console.log('node', node)
-
-      //     }
-
-      //     return node
-      //   }
-      // })
       .use(remark2rehype)
       .use(rehypePrism)
       // .use(highlight)
@@ -45,11 +32,11 @@ const RemarkRenderer = ({
   }
 
   useEffect(() => {
+    // reformat and style $ shell commands
     const nodes = document.querySelectorAll(
       'code.language-shell:not(.shell-restyled), code.language-bash:not(.shell-restyled), code.language-sh:not(.shell-restyled), code.language-console:not(.shell-restyled), code.language-zsh:not(.shell-restyled)'
     )
     nodes.forEach(n => {
-      console.log('>>', n)
       n.className = n.className + ' shell-restyled'
       n.innerHTML = `<ul>${n.innerHTML
         .split('\n')
