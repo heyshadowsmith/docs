@@ -6,7 +6,7 @@ const ContentSection = ({ className, children }) => (
   <section className={className}>{children}</section>
 )
 
-const DatoCMSRenderer = ({ content, ...props }) => (
+const DatoCMSRenderer = ({ content, components: customComponents }) => (
   <article>
     {content.map((block, index) => {
       console.log('block', block)
@@ -16,7 +16,7 @@ const DatoCMSRenderer = ({ content, ...props }) => (
           <RemarkRenderer
             components={{
               ...components,
-              ...props.components
+              ...customComponents
             }}
             contentType={block.contentType}
           >
@@ -63,7 +63,7 @@ const DatoCMSRenderer = ({ content, ...props }) => (
           <RemarkRenderer
             components={{
               ...components,
-              ...props.components
+              ...customComponents
             }}
             contentType="code"
             caption={block.caption}
