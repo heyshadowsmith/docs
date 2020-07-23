@@ -247,11 +247,15 @@ export default function DeployButtonGenerator() {
     hasEnv && envDescription
       ? `&envDescription=${encodeURIComponent(envDescription)}`
       : ''
-  }${hasEnv && envDescription && envLink ? `&envLink=${envLink}` : ''}${
-    projectName ? `&project-name=${encodeURIComponent(projectName)}` : ''
-  }${repoName ? `&repo-name=${encodeURIComponent(repoName)}` : ''}${
-    redirectUrl ? `&redirect-url=${encodeURIComponent(redirectUrl)}` : ''
-  }${redirectUrl && developerId ? `&developer-id=${developerId}` : ''}${
+  }${
+    hasEnv && envDescription && envLink
+      ? `&envLink=${encodeURIComponent(envLink)}`
+      : ''
+  }${projectName ? `&project-name=${encodeURIComponent(projectName)}` : ''}${
+    repoName ? `&repo-name=${encodeURIComponent(repoName)}` : ''
+  }${redirectUrl ? `&redirect-url=${encodeURIComponent(redirectUrl)}` : ''}${
+    redirectUrl && developerId ? `&developer-id=${developerId}` : ''
+  }${
     redirectUrl && deployHook
       ? `&production-deploy-hook=${encodeURIComponent(deployHook)}`
       : ''
@@ -272,7 +276,7 @@ export default function DeployButtonGenerator() {
       ) : null}
       {hasEnv && envDescription && envLink ? (
         <>
-          &amp;<b>envLink={envLink}</b>
+          &amp;<b>envLink={encodeURIComponent(envLink)}</b>
         </>
       ) : null}
       {projectName ? (
@@ -324,9 +328,8 @@ export default function DeployButtonGenerator() {
       </Heading>
 
       <Text>
-        Use the following Deploy Button snippets in your templates to help users
-        get started with their projects by cloning and deploying from a Git
-        repository.
+        Use the snippets below in your Git repositories or your dashboards for
+        users to deploy.
       </Text>
 
       <Tabs
@@ -396,10 +399,9 @@ export default function DeployButtonGenerator() {
       </Heading>
 
       <Text>
-        Generate your own Deploy Button in the{' '}
-        <Link href="#snippets">Snippets</Link> above, starting with the source
-        public template repository URL from GitHub, GitLab, or Bitbucket that
-        users clone and deploy.
+        Customize the above Deploy Button <Link href="#snippets">snippets</Link>{' '}
+        starting with a public Git repository URL from GitHub, GitLab, or
+        Bitbucket.
       </Text>
 
       <div className={styles.settingsForm}>
@@ -426,8 +428,8 @@ export default function DeployButtonGenerator() {
         </div>
 
         <Text>
-          Additionally you can customize your deployment by adding the
-          configuration that your project needs. For more information go to the{' '}
+          You can customize the Deploy Flow and created project with the
+          following additional settings. For more information see the{' '}
           <Link href="#url-parameter-reference">URL Parameter Reference</Link>.
         </Text>
 
