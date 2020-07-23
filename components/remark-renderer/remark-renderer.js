@@ -5,10 +5,14 @@ import remark2rehype from 'remark-rehype'
 import rehype2react from 'rehype-react'
 import rehypePrism from '@mapbox/rehype-prism'
 
-import classNames from 'classnames'
-
 import RemarkNote from '~/components/text/remark-note'
 import RemarkCaption from '~/components/text/remark-caption'
+import { Code } from '~/components/remark-code'
+import withClipboard from '~/lib/with-clipboard'
+
+// import copy from 'copy-to-clipboard'
+// import Copy from '~/components/icons/copy'
+// import { useToasts } from '~/components/toasts'
 
 const RemarkRenderer = ({
   caption,
@@ -25,7 +29,10 @@ const RemarkRenderer = ({
       // .use(highlight)
       .use(rehype2react, {
         createElement: React.createElement,
-        components
+        components: {
+          ...components,
+          code: allowCopy === true ? withClipboard(Code) : Code
+        }
       })
 
     return markdownProcessor.processSync(md).result
@@ -57,13 +64,7 @@ const RemarkRenderer = ({
     <RemarkCaption components={{ ...components }}>{children}</RemarkCaption>
   ) : contentType === 'code' ? (
     <>
-      <div
-        className={classNames({
-          'allow-copy': allowCopy === true
-        })}
-      >
-        {renderMarkdown(children)}
-      </div>
+      {renderMarkdown(children)}
       <RemarkCaption components={{ ...components }}>{caption}</RemarkCaption>
     </>
   ) : contentType === undefined ? (

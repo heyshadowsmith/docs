@@ -12,6 +12,7 @@ const Pre = ({ className, children }) => (
           overflow: auto;
           -webkit-overflow-scrolling: touch;
           background: white;
+          position: relative;
         }
 
         pre.language-shell,
