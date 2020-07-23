@@ -86,11 +86,11 @@ const Code = ({ className, children }, { darkBg } = {}) => {
         :global(pre) code.language-bash :global(ul li),
         :global(pre) code.language-sh :global(ul li),
         :global(pre) code.language-zsh :global(ul li) {
-          display: flex;
           margin: 0;
           padding: 0;
-          flex-shrink: 0;
-          flex-grow: 0;
+          display: block;
+          margin-left: 25px;
+          text-indent: -10px;
         }
 
 
@@ -103,13 +103,19 @@ const Code = ({ className, children }, { darkBg } = {}) => {
           user-select: none;
           white-space: pre;
           color: #CCC;
-          display: block;
-          flex-shrink: 0;
-          flex-grow: 0;
+          display: inline-block;
+          margin-left: -10px;
+          
         }
 
 
-        
+        :global(pre) code.language-shell :global(span.token),
+        :global(pre) code.language-console :global(span.token),
+        :global(pre) code.language-bash :global(span.token),
+        :global(pre) code.language-sh :global(span.token),
+        :global(pre) code.language-zsh :global(span.token) {
+          color: #fff;
+        }
 
         :global(pre) code.language-shell :global(span.token.function),
         :global(pre) code.language-console :global(span.token.function),
@@ -125,6 +131,16 @@ const Code = ({ className, children }, { darkBg } = {}) => {
         :global(pre) code.language-bash :global(span.token.string),
         :global(pre) code.language-sh :global(span.token.string),
         :global(pre) code.language-zsh :global(span.token.string) {
+          color: #fff;
+          opacity: 0.8;
+          font-style: italic;
+        }
+
+        :global(pre) code.language-shell :global(span.token.variable),
+        :global(pre) code.language-console :global(span.token.variable),
+        :global(pre) code.language-bash :global(span.token.variable),
+        :global(pre) code.language-sh :global(span.token.variable),
+        :global(pre) code.language-zsh :global(span.token.variable) {
           color: #fff;
           opacity: 0.8;
           font-style: italic;
