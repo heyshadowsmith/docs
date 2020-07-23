@@ -1,5 +1,5 @@
-const Pre = ({ children }) => (
-  <pre>
+const Pre = ({ className, children }) => (
+  <pre className={className}>
     {children}
     <style jsx>
       {`
@@ -12,6 +12,15 @@ const Pre = ({ children }) => (
           overflow: auto;
           -webkit-overflow-scrolling: touch;
           background: white;
+        }
+
+        pre.language-shell,
+        pre.language-console,
+        pre.language-bash,
+        pre.language-sh,
+        pre.language-zsh {
+          background: #2f2f2f;
+          border-color: #333;
         }
       `}
     </style>

@@ -89,18 +89,25 @@ const Code = ({ className, children }, { darkBg } = {}) => {
           content: '$ ';
           user-select: none;
           white-space: pre;
-          color: #888;
+          color: #CCC;
           display: block;
           flex-shrink: 0;
           flex-grow: 0;
         }
 
+
+        :global(pre) code.language-shell,
+        :global(pre) code.language-console,
+        :global(pre) code.language-bash,
+        :global(pre) code.language-sh,
+        :global(pre) code.language-zsh {
+          color: #fff;
+          background: transparent;
+        }
+
         
 
 
-
-
-        
         :global(pre).dark {
           border-color: #333;
           background: transparent;
