@@ -13,10 +13,10 @@ const RemarkImage = ({
     <>
       {href ? (
         <a href={href} target={target} rel="noopener">
-          <Image {...props} />
+          <Image {...props} shadow={true} />
         </a>
       ) : (
-        <Image {...props} />
+        <Image {...props} shadow={true} />
       )}
       <RemarkCaption
         components={{
