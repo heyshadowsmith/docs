@@ -60,12 +60,17 @@ const DatoCMSRenderer = ({ content, ...props }) => (
         </ContentSection>
       ) : block._modelApiKey === 'code' ? (
         <ContentSection className={`${block._modelApiKey}`} key={index}>
-          <div style={{ marginLeft: '2rem', fontSize: '0.9rem' }}>
-            unsupported block type:{' '}
-            <pre style={{ display: 'inline', backgroundColor: '#FFFF00' }}>
-              {block._modelApiKey}
-            </pre>
-          </div>
+          <RemarkRenderer
+            components={{
+              ...components,
+              ...props.components
+            }}
+            contentType="code"
+            caption={block.caption}
+            allowCopy={block.allowCopy}
+          >
+            {block.content}
+          </RemarkRenderer>
         </ContentSection>
       ) : block._modelApiKey === 'git_import' ? (
         <ContentSection className={`${block._modelApiKey}`} key={index}>

@@ -78,6 +78,9 @@ export async function getStaticProps({ params: {slug} } ) {
             ... on CodeRecord {
               id
               _modelApiKey
+              allowCopy
+              caption
+              content
             }
             ... on GitImportRecord {
               id

@@ -55,6 +55,7 @@
     "react-use-measure": "2.0.0",
     "refractor": "2.8.0",
     "rehype": "7.0.0",
+    "rehype-highlight": "4.0.0",
     "rehype-react": "6.0.0",
     "remark": "10.0.1",
     "remark-mdx": "0.20.3",
