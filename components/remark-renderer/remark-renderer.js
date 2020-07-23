@@ -45,7 +45,7 @@ const RemarkRenderer = ({
         })
         .join('')}</ul>`
     })
-  }, [])
+  }, [children])
 
   return contentType === 'default' ? (
     <>{renderMarkdown(children)}</>
