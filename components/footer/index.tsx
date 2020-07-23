@@ -222,9 +222,6 @@ const Footer = ({ light }: FooterProps) => {
                 <Twitter fill="currentColor" height={16} />
               </a>
             </li>
-            <li>
-              <a href={`mailto:support@vercel.com`}>support@vercel.com</a>
-            </li>
           </ul>
         </span>
       </div>
