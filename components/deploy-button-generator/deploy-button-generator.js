@@ -3,7 +3,7 @@ import { useAmp } from 'next/amp'
 import Tabs from '~/components/tabs'
 import Snippet from '~/components/snippet'
 import Details from '~/components/details'
-import { Clearable } from '~/components/input'
+import Input, { Clearable } from '~/components/input'
 import Button from '~/components/buttons'
 import Spacer from '~/components/spacer'
 import ErrorMessage from '~/components/error'
@@ -436,8 +436,8 @@ export default function DeployButtonGenerator() {
         <div className={styles.settingsSection}>
           <Details title="Environment Variables">
             <Text small id="env-description">
-              Define Environment Variable Keys that the app needs. The values
-              will be filled in by the user.
+              Define Environment Variable Keys that the Git repository needs to
+              deploy successfully. The values will be filled in by the user.
             </Text>
             <Spacer />
             <Label value="Environment Variables Keys" elId="env-label" />
@@ -446,7 +446,7 @@ export default function DeployButtonGenerator() {
                 <>
                   <div className={styles.envRow} key={envVar.id}>
                     <div className={styles.envInput}>
-                      <Clearable
+                      <Input
                         placeholder="MY_API_KEY"
                         width="100%"
                         value={envVar.value}
@@ -519,9 +519,13 @@ export default function DeployButtonGenerator() {
             <Text small>
               If you're setting up a project on behalf of the user and already
               know what name the user likely wants, enter a default project
-              name. Additionally fill this is for the repository name.
+              name. Additionally, fill this in for the repository name.
             </Text>
-            <Spacer />
+            <HR spacing={24} />
+            <Text small>
+              Set a default repository name for the new Git repository created
+              by the user in the Deploy Flow.
+            </Text>
             <Clearable
               label="Default Project Name"
               placeholder="my-awesome-project"
