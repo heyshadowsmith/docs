@@ -34,7 +34,6 @@ const RemarkRenderer = ({
       .use(markdown)
       .use(remark2rehype)
       .use(rehypePrism)
-      // .use(highlight)
       .use(rehype2react, {
         createElement: React.createElement,
         components: {
