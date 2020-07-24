@@ -10,7 +10,7 @@ const GitImports = ({
   hideGitLab = false,
   hideBitbucket = false
 }) => {
-  const baseHref = 'https://vercel.com/import/git'
+  const baseHref = '/import/git'
   const href = `${baseHref}${repoUrl !== undefined ? `?s=${repoUrl}` : ``}`
 
   return (
