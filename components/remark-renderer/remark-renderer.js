@@ -10,7 +10,6 @@ import RemarkCaption from '~/components/text/remark-caption'
 import { Code } from '~/components/remark-code'
 import withClipboard from '~/lib/with-clipboard'
 
-
 const RemarkRenderer = ({
   caption,
   allowCopy,
@@ -45,21 +44,8 @@ const RemarkRenderer = ({
     return markdownProcessor.processSync(md).result
   }
 
+  // reformat shell script, wrap each line with <li> so that CSS can be used to add $ to front of each line
   useEffect(() => {
-    // reformat and style $ shell commands
-    // const nodes = document.querySelectorAll(
-    //   'code.language-shell:not(.shell-restyled), code.language-bash:not(.shell-restyled), code.language-sh:not(.shell-restyled), code.language-console:not(.shell-restyled), code.language-zsh:not(.shell-restyled)'
-    // )
-    // nodes.forEach(n => {
-    //   n.className = n.className + ' shell-restyled'
-    //   n.innerHTML = `<ul>${n.innerHTML
-    //     .split('\n')
-    //     .map(line => {
-    //       return line.trim() !== '' ? `<li>${line}</li>` : ``
-    //     })
-    //     .join('')}</ul>`
-    // })
-
     const isShellScript = className =>
       ['shell', 'sh', 'bash', 'console', 'zsh'].some(word =>
         className.includes(`language-${word}`)
