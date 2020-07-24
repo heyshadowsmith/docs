@@ -5,14 +5,13 @@ import GitLabIcon from '~/components/icons/gitlab'
 import GitHubIcon from '~/components/icons/github'
 
 const GitImports = ({
-  repoURL,
+  repoUrl,
   hideGitHub = false,
   hideGitLab = false,
   hideBitbucket = false
 }) => {
   const baseHref = 'https://vercel.com/import/git'
-
-  const href = `${baseHref}${repoURL !== undefined ? `?s=${repoURL}` : ``}`
+  const href = `${baseHref}${repoUrl !== undefined ? `?s=${repoUrl}` : ``}`
 
   return (
     <List columnsDesktop={3} columnsTablet={3} columnsMobile={1}>
