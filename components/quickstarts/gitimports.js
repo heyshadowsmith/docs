@@ -11,7 +11,9 @@ const GitImports = ({
   hideBitbucket = false
 }) => {
   const baseHref = '/import/git'
-  const href = `${baseHref}${repoUrl !== undefined ? `?s=${repoUrl}` : ``}`
+  const href = `${baseHref}${
+    repoUrl !== undefined ? `project?template=${repoUrl}` : ``
+  }`
 
   return (
     <List columnsDesktop={3} columnsTablet={3} columnsMobile={1}>
