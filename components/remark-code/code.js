@@ -4,8 +4,6 @@ import classNames from 'classnames'
 const literal = '`'
 
 const Code = React.forwardRef(({ className, children }, ref = {}) => {
-  // console.log('code >> ', children)
-  // console.log('code ref', ref)
   const darkBg = ref ? ref.darkBg : undefined
   return (
     <>
