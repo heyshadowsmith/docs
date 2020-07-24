@@ -1,6 +1,7 @@
 import { RemarkImage } from '~/components/media'
 import RemarkRenderer from '~/components/remark-renderer'
 import components from '~/lib/remark-components'
+import { GitImports } from '~/components/quickstarts'
 
 const ContentSection = ({ className, children }) => (
   <section className={className}>{children}</section>
@@ -22,15 +23,6 @@ const DatoCMSRenderer = ({ content, components: customComponents }) => (
           >
             {block.content}
           </RemarkRenderer>
-        </ContentSection>
-      ) : block._modelApiKey === 'html' ? (
-        <ContentSection className={`${block._modelApiKey}`} key={index}>
-          <div style={{ marginLeft: '2rem', fontSize: '0.9rem' }}>
-            unsupported block type:{' '}
-            <pre style={{ display: 'inline', backgroundColor: '#FFFF00' }}>
-              {block._modelApiKey}
-            </pre>
-          </div>
         </ContentSection>
       ) : block._modelApiKey === 'image' ? (
         <ContentSection className={`${block._modelApiKey}`} key={index}>
@@ -74,12 +66,12 @@ const DatoCMSRenderer = ({ content, components: customComponents }) => (
         </ContentSection>
       ) : block._modelApiKey === 'git_import' ? (
         <ContentSection className={`${block._modelApiKey}`} key={index}>
-          <div style={{ marginLeft: '2rem', fontSize: '0.9rem' }}>
-            unsupported block type:{' '}
-            <pre style={{ display: 'inline', backgroundColor: '#FFFF00' }}>
-              {block._modelApiKey}
-            </pre>
-          </div>
+          <GitImports
+            repoUrl={block.repoUrl}
+            hideGitHub={!block.showGithub}
+            hideGitLab={!block.showGitlab}
+            hideBitbucket={!block.showBitbucket}
+          />
         </ContentSection>
       ) : block._modelApiKey === 'vercel_deploy_button' ? (
         <ContentSection className={`${block._modelApiKey}`} key={index}>
@@ -100,6 +92,15 @@ const DatoCMSRenderer = ({ content, components: customComponents }) => (
           </div>
         </ContentSection>
       ) : block._modelApiKey === 'video_external' ? (
+        <ContentSection className={`${block._modelApiKey}`} key={index}>
+          <div style={{ marginLeft: '2rem', fontSize: '0.9rem' }}>
+            unsupported block type:{' '}
+            <pre style={{ display: 'inline', backgroundColor: '#FFFF00' }}>
+              {block._modelApiKey}
+            </pre>
+          </div>
+        </ContentSection>
+      ) : block._modelApiKey === 'html' ? (
         <ContentSection className={`${block._modelApiKey}`} key={index}>
           <div style={{ marginLeft: '2rem', fontSize: '0.9rem' }}>
             unsupported block type:{' '}

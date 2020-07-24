@@ -85,6 +85,10 @@ export async function getStaticProps({ params: {slug} } ) {
             ... on GitImportRecord {
               id
               _modelApiKey
+              showBitbucket
+              showGithub
+              showGitlab
+              repoUrl
             }
             ... on VercelDeployButtonRecord {
               id
