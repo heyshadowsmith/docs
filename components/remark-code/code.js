@@ -11,7 +11,6 @@ const Code = React.forwardRef(({ className, children }, ref = {}) => {
         ref={ref}
         className={classNames(className, {
           dark: darkBg
-          // 'no-wrap': noWrap
         })}
       >
         {children}
