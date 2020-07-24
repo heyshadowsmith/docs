@@ -80,7 +80,6 @@ class withStandard extends React.PureComponent {
       }
     } = this.props
 
-    console.log('post', post)
 
     return (
       <>
