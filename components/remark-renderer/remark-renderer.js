@@ -10,9 +10,6 @@ import RemarkCaption from '~/components/text/remark-caption'
 import { Code } from '~/components/remark-code'
 import withClipboard from '~/lib/with-clipboard'
 
-// import copy from 'copy-to-clipboard'
-// import Copy from '~/components/icons/copy'
-// import { useToasts } from '~/components/toasts'
 
 const RemarkRenderer = ({
   caption,
