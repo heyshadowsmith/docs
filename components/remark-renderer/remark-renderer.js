@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import unified from 'unified'
 import markdown from 'remark-parse'
 import remark2rehype from 'remark-rehype'
@@ -21,6 +21,14 @@ const RemarkRenderer = ({
   children,
   components
 }) => {
+  const codeBlockRefs = []
+
+  const getNewCodeBlockRefs = () => {
+    const codeBlockRef = useRef()
+    codeBlockRefs.push(codeBlockRef)
+    return codeBlockRef
+  }
+
   const renderMarkdown = md => {
     const markdownProcessor = unified()
       .use(markdown)
@@ -31,7 +39,10 @@ const RemarkRenderer = ({
         createElement: React.createElement,
         components: {
           ...components,
-          code: allowCopy === true ? withClipboard(Code) : Code
+          code:
+            allowCopy === true
+              ? withClipboard(Code, getNewCodeBlockRefs)
+              : props => <Code ref={getNewCodeBlockRefs()} {...props} />
         }
       })
 
@@ -40,17 +51,37 @@ const RemarkRenderer = ({
 
   useEffect(() => {
     // reformat and style $ shell commands
-    const nodes = document.querySelectorAll(
-      'code.language-shell:not(.shell-restyled), code.language-bash:not(.shell-restyled), code.language-sh:not(.shell-restyled), code.language-console:not(.shell-restyled), code.language-zsh:not(.shell-restyled)'
-    )
-    nodes.forEach(n => {
-      n.className = n.className + ' shell-restyled'
-      n.innerHTML = `<ul>${n.innerHTML
-        .split('\n')
-        .map(line => {
-          return line.trim() !== '' ? `<li>${line}</li>` : ``
-        })
-        .join('')}</ul>`
+    // const nodes = document.querySelectorAll(
+    //   'code.language-shell:not(.shell-restyled), code.language-bash:not(.shell-restyled), code.language-sh:not(.shell-restyled), code.language-console:not(.shell-restyled), code.language-zsh:not(.shell-restyled)'
+    // )
+    // nodes.forEach(n => {
+    //   n.className = n.className + ' shell-restyled'
+    //   n.innerHTML = `<ul>${n.innerHTML
+    //     .split('\n')
+    //     .map(line => {
+    //       return line.trim() !== '' ? `<li>${line}</li>` : ``
+    //     })
+    //     .join('')}</ul>`
+    // })
+
+    const isShellScript = className =>
+      ['shell', 'sh', 'bash', 'console', 'zsh'].some(word =>
+        className.includes(`language-${word}`)
+      )
+
+    codeBlockRefs.map(codeBlockRef => {
+      if (codeBlockRef.current) {
+        const codeBlock = codeBlockRef.current
+
+        if (isShellScript(codeBlock.className)) {
+          codeBlock.innerHTML = `<ul>${codeBlock.innerHTML
+            .split('\n')
+            .map(line => {
+              return line.trim() !== '' ? `<li>${line}</li>` : ``
+            })
+            .join('')}</ul>`
+        }
+      }
     })
   }, [children])
 

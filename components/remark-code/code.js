@@ -1,12 +1,16 @@
+import React from 'react'
 import classNames from 'classnames'
 
 const literal = '`'
 
-const Code = ({ className, children }, { darkBg } = {}) => {
+const Code = React.forwardRef(({ className, children }, ref = {}) => {
   // console.log('code >> ', children)
+  // console.log('code ref', ref)
+  const darkBg = ref ? ref.darkBg : undefined
   return (
     <>
       <code
+        ref={ref}
         className={classNames(className, {
           dark: darkBg
           // 'no-wrap': noWrap
@@ -166,6 +170,6 @@ const Code = ({ className, children }, { darkBg } = {}) => {
       </style>
     </>
   )
-}
+})
 
 export default Code
