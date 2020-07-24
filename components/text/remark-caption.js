@@ -33,28 +33,5 @@ const RemarkCaption = ({
   </div>
 )
 
-// const Code = ({ children }) => (
-//   <code>
-//     {children}
-//     <style jsx>
-//       {`
-//         code {
-//           color: #666;
-//           font-family: var(--font-mono);
-//         }
-
-//         code::before {
-//           content: '\`';
-//         }
-
-//         code::after {
-//           content: '\`';
-//         }
-//       `}
-//     </style>
-//   </code>
-// )
-
-// RemarkCaption.Code = Code
 
 export default RemarkCaption
